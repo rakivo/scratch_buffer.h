@@ -16,14 +16,14 @@
 
             -------------------- USAGE --------------------
 
-  First, to include all the implementations you need to define SCRATCH_BUFFER_IMPLEMENTATION, and then just include this file into your project. For example:
+  First, to include all the implementations you need to define SCRATCH_BUFFER_IMPLEMENTATION, and then just include this file into your project. This is how you do that:
+
+#define SCRATCH_BUFFER_IMPLEMENTATION
+#include "scratch_buffer.h"
 
   If you need to save strings on the heap, created by the scratch buffer, you can use `scratch_buffer_copy` function, but first, you need to initialize `char_arena` on which strings will be allocated on, in order to do that, call `memory_init` function and pass the maximum amount of megabytes can be allocated on the arena, I usually set it something like 1-3. And, do not forget to call `memory_release` at the end of your program to `free` all the data and avoid memory leaks.
 
   You can take a deeper look into the scratch buffer functions, they are so simple and self-explanatory! To find those, you can search `SCRATCH BUFFER FUNCTIONS` in your editor or just jump to 237th line.
-
-#define SCRATCH_BUFFER_IMPLEMENTATION
-#include "scratch_buffer.h"
 */
 
 #ifndef SCRATCH_BUFFER_H
