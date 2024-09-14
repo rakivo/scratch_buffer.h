@@ -32,17 +32,17 @@
 #include <stdint.h>
 
 #if defined( _WIN32 ) || defined( __WIN32__ ) || defined( _WIN64 )
-#define PLATFORM_WINDOWS 1
-#define PLATFORM_POSIX 0
+	#define PLATFORM_WINDOWS 1
+	#define PLATFORM_POSIX 0
 #else
-#define PLATFORM_WINDOWS 0
-#define PLATFORM_POSIX 1
+	#define PLATFORM_WINDOWS 0
+	#define PLATFORM_POSIX 1
 #endif
 
 #ifdef PLATFORM_WINDOWS
-typedef unsigned long long size_t;
+	typedef unsigned long long size_t;
 #else
-#include <stdlib.h>
+	#include <stdlib.h>
 #endif
 
 #define MAX_STRING_BUFFER 0x10000
@@ -52,7 +52,6 @@ typedef unsigned long long size_t;
 #elif defined(_MSC_VER)
 	#define NORETURN __declspec(noreturn)
 #else
-	#define PACK(__Declaration__) __Declaration__
 	#define NORETURN
 #endif
 
@@ -88,8 +87,6 @@ NORETURN void error_exit(const char *format, ...);
 #include <stdarg.h>
 #include <stddef.h>
 #include <assert.h>
-
-#define malloc_string calloc_string
 
 #define KB 1024ul
 #define MB (KB * 1024ul)
