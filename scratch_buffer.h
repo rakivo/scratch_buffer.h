@@ -30,7 +30,20 @@
 #define SCRATCH_BUFFER_H
 
 #include <stdint.h>
+
+#if defined( _WIN32 ) || defined( __WIN32__ ) || defined( _WIN64 )
+#define PLATFORM_WINDOWS 1
+#define PLATFORM_POSIX 0
+#else
+#define PLATFORM_WINDOWS 0
+#define PLATFORM_POSIX 1
+#endif
+
+#ifdef PLATFORM_WINDOWS
+typedef unsigned long long size_t;
+#else
 #include <stdlib.h>
+#endif
 
 #define MAX_STRING_BUFFER 0x10000
 
@@ -80,14 +93,6 @@ NORETURN void error_exit(const char *format, ...);
 
 #define KB 1024ul
 #define MB (KB * 1024ul)
-
-#if defined( _WIN32 ) || defined( __WIN32__ ) || defined( _WIN64 )
-#define PLATFORM_WINDOWS 1
-#define PLATFORM_POSIX 0
-#else
-#define PLATFORM_WINDOWS 0
-#define PLATFORM_POSIX 1
-#endif
 
 #if PLATFORM_POSIX
 #include <sys/mman.h>
@@ -140,7 +145,7 @@ static inline void mmap_init(Vmem *vmem, size_t size)
 	vmem->committed = 0;
 	if (!ptr)
 	{
-		FATAL_ERROR("Failed to map virtual memory block");
+		assert(0 && "Failed to map virtual memory block");
 	}
 #elif PLATFORM_POSIX
 	void* ptr = NULL;
@@ -159,11 +164,11 @@ static inline void mmap_init(Vmem *vmem, size_t size)
 	// Check if we ended on a failure.
 	if ((ptr == MAP_FAILED) || !ptr)
 	{
-    assert(0 && "Failed to map a virtual memory block.");
+		assert(0 && "Failed to map a virtual memory block.");
 	}
 	// Otherwise, record the size and we're fine!
 #else
-  assert(0 && "Unsupported platform.");
+	assert(0 && "Unsupported platform.");
 #endif
 	vmem->size = size;
 	vmem->ptr = ptr;
@@ -181,7 +186,7 @@ static inline void* mmap_allocate(Vmem *vmem, size_t to_allocate)
 	{
 		size_t to_commit = blocks_to_allocate * COMMIT_PAGE_SIZE;
 		void *res = VirtualAlloc(((char*)vmem->ptr) + vmem->committed, to_commit, MEM_COMMIT, PAGE_READWRITE);
-		if (!res) FATAL_ERROR("Failed to allocate more memory.");
+		if (!res) assert(0 && "Failed to allocate more memory.");
 		vmem->committed += to_commit;
 	}
 #endif
