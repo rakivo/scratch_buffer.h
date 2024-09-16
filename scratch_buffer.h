@@ -30,19 +30,14 @@
 #define SCRATCH_BUFFER_H
 
 #include <stdint.h>
+#include <stddef.h>
 
-#if defined( _WIN32 ) || defined( __WIN32__ ) || defined( _WIN64 )
+#if defined(_WIN32 ) || defined(__WIN32__ ) || defined(_WIN64)
 	#define PLATFORM_WINDOWS 1
 	#define PLATFORM_POSIX 0
 #else
 	#define PLATFORM_WINDOWS 0
 	#define PLATFORM_POSIX 1
-#endif
-
-#ifdef PLATFORM_WINDOWS
-	typedef unsigned long long size_t;
-#else
-	#include <stdlib.h>
 #endif
 
 #define MAX_STRING_BUFFER 0x10000
@@ -231,7 +226,7 @@ void *calloc_string(size_t len)
 
 static char *str_copy(const char *start, size_t str_len)
 {
-	char *dst = calloc_string(str_len + 1);
+	char *dst = (char *) calloc_string(str_len + 1);
 	memcpy(dst, start, str_len);
 	// No need to set the end
 	return dst;
